@@ -1,0 +1,42 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Buat Struktur Direktori
+        run: |
+          mkdir -p app/src/main/java/com/bengkel/karyatunasmuda
+
+      - name: Buat MainActivity.kt Sementara
+        run: |
+          echo "package com.bengkel.karyatunasmuda" > app/src/main/java/com/bengkel/karyatunasmuda/MainActivity.kt
+          echo "import android.os.Bundle" >> app/src/main/java/com/bengkel/karyatunasmuda/MainActivity.kt
+          echo "import androidx.activity.ComponentActivity" >> app/src/main/java/com/bengkel/karyatunasmuda/MainActivity.kt
+          echo "import androidx.activity.compose.setContent" >> app/src/main/java/com/bengkel/karyatunasmuda/MainActivity.kt
+          echo "class MainActivity : ComponentActivity() { override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) } }" >> app/src/main/java/com/bengkel/karyatunasmuda/MainActivity.kt
+
+      - name: Buat Konfigurasi Gradle Minimum
+        run: |
+          echo "include(':app')" > settings.gradle.kts
+          mkdir -p app
+          echo "plugins { id('com.android.application') version '8.1.0' apply false }" > build.gradle.kts
+          echo "plugins { id('com.android.application') }; android { namespace 'com.bengkel.karyatunasmuda'; compileSdk 34; defaultConfig { applicationId 'com.bengkel.karyatunasmuda'; minSdk 24; targetSdk 34; versionCode 1; versionName '1.0' } }" > app/build.gradle.kts
+          mkdir -p app/src
+          echo "manifest" > app/src/AndroidManifest.xml
+
+      - name: Build APK (Dummy Test)
+        run: echo "Workflow siap!"
