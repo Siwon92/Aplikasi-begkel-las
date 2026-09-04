@@ -17,9 +17,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Jalankan Setup Proyek
-        run: chmod +x setup.sh && ./setup.sh
-
       - name: Build APK with Gradle
         run: ./gradlew assembleDebug
 
@@ -28,3 +25,4 @@ jobs:
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+
